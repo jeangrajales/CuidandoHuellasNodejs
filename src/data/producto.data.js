@@ -17,6 +17,15 @@ exports.findProducto = async (filter, projection) =>{
     }
 };
 
+exports.getAllProductos = async () => {
+    try {
+        return await modeloProducto.find(); // Devuelve la lista completa de productos
+    } catch (error) {
+        return error;
+    }
+};
+
+
 exports.updateProductoRecord = async (filter, projection) => {
     
 }

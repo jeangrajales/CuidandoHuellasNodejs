@@ -1,5 +1,7 @@
 const exp = require("express")
 const modeloProducto = require('./src/models/producto.model')
+const dbProducto = require('./src/data/producto.data');
+
 
 const app = exp();
 
@@ -18,15 +20,17 @@ app.get('/', (req, res) => {
   res.render('pages/pagina_principal'); // Renderiza las plantillas desde la carpeta 'views'
 });
 
-app.get('/productos', async(req, res)=>{
-    let listaProducto = await modeloProducto.find({});
-    console.log(listaProducto)
-    if (listaProducto){
-        res.json(listaProducto);
-    }else{
-        res.json({"Error": "Hubo un error"})
+
+app.get('/productos', async (req, res) => {
+    try {
+        const productos = await dbProducto.getAllProductos();
+        console.log("Productos obtenidos:", productos); // Verificar si hay datos
+        res.render('pages/productos', { productos });
+    } catch (error) {
+        console.error("Error cargando los productos:", error); // Muestra el error exacto en la consola
+        res.status(500).send("Error cargando los productos");
     }
-})
+});
 
 
 //callback

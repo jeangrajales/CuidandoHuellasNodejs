@@ -1,11 +1,16 @@
 const router = require('express').Router();
 const productoController = require('../src/controller/producto.controller')
 const controladorVendedor = require('../src/controller/vendedor.controller')
+const usuarioController = require('../src/controller/usuario.controller')
+
 
 // Catalogo
 
-router.get('/productos', productoController.addProducto); 
+router.post('/productos', productoController.addProducto); 
+router.get('/productos',productoController.getProductos)
 
+// Login
+router.get('/signin', usuarioController.renderSignInPage);
 
 
 router.get('/vendedores',controladorVendedor.registrar)

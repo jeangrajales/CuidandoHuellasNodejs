@@ -13,15 +13,25 @@ exports.addProducto = async (req, res) => {
             return res.status(400).json({ error: "Este producto ya se encuentra registrado" });
         }
 
-        const producto = await dbProducto.createProductoRecord(req.body);
-        console.log("Producto guardado:", producto);
+        const Producto = await dbProducto.createProductoRecord(req.body);
+        console.log("Producto guardado:", Producto);
 
-        return res.status(200).json({ mensaje: "Producto registrado con éxito", producto });
+        return res.status(200).json({ mensaje: "Producto registrado con éxito", Producto });
     } catch (error) {
         console.error("Error en la inserción:", error);
         return res.status(500).json({ error: "Error interno del servidor" });
     }
 };
+
+exports.getProductos = async (req, res) => {
+    try {
+        const productos = await dbProducto.getAllProductos();
+        res.status(200).json(productos);
+    } catch (error) {
+        console.log(error)
+    }
+};
+
 
 
 
