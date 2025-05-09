@@ -10,6 +10,9 @@ app.set('view engine', 'ejs'); // Se Configura EJS como motor de plantillas
 app.set('views', __dirname + '/src/views');
 app.use(exp.static(__dirname + '/src/public'));
 
+// Middleware para procesar JSON
+app.use(exp.json());
+app.use(exp.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
   res.render('pages/pagina_principal'); // Renderiza las plantillas desde la carpeta 'views'
@@ -23,20 +26,6 @@ app.get('/productos', async(req, res)=>{
     }else{
         res.json({"Error": "Hubo un error"})
     }
-
-})
-
-app.post('/productos', async(req,res)=>{
-    const nuevoProducto = {
-        nombre: req.body.nombre,
-        precio: req.body.precio,
-    };
-
-    let Insercion = await modeloProducto.create(nuevoProducto);
-    if (Insercion)
-        res.status(200).json({"Mensaje": "Registo Exitoso"})
-    else
-        res.status(404).json({"Mensaje": "Se presento un Error"})
 })
 
 

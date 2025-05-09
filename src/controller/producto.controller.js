@@ -3,15 +3,23 @@ const dbProducto = require('../data/producto.data');
 
 exports.addProducto = async (req, res) => {
     try {
-        const ProductoIsRegistered = await dbProducto.findProducto({isbn: isbn});
+        console.log("Solicitud recibida:", req.body); // Verifica si llegan los datos
+
+        const ProductoIsRegistered = await dbProducto.findProducto({ referencia: req.body.referencia });
+        console.log("Resultado de la búsqueda:", ProductoIsRegistered);
+
         if (ProductoIsRegistered) {
-            return res.status(400).json({error: 'Este producto ya se encuentra registrado'})
+            console.log("Producto ya registrado.");
+            return res.status(400).json({ error: "Este producto ya se encuentra registrado" });
         }
+
         const producto = await dbProducto.createProductoRecord(req.body);
-        return res.status(200).json({mensaje: 'Producto registrado con éxito'});
+        console.log("Producto guardado:", producto);
+
+        return res.status(200).json({ mensaje: "Producto registrado con éxito", producto });
     } catch (error) {
-        console.error(error);
-        return res.render('500', {error: error, });
+        console.error("Error en la inserción:", error);
+        return res.status(500).json({ error: "Error interno del servidor" });
     }
 };
 

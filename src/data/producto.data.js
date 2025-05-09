@@ -2,7 +2,7 @@ const modeloProducto = require('../models/producto.model');
 
 exports.createProductoRecord = async (productoInfo) =>{
     try {
-        return new Producto(productoInfo).save();
+        return new modeloProducto(productoInfo).save();
     } catch (error) {
         return error;
     }
@@ -10,8 +10,8 @@ exports.createProductoRecord = async (productoInfo) =>{
 
 exports.findProducto = async (filter, projection) =>{
     try {
-        if (!projection) return await Producto.findOne(filter);
-        else return await Producto.findOne(filter, projection);
+        if (!projection) return await modeloProducto.findOne(filter);
+        else return await modeloProducto.findOne(filter, projection);
     } catch (error){
         return error;
     }
