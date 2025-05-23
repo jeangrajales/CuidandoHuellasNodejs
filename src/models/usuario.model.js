@@ -29,8 +29,8 @@ const schemaUsuario = new mongoose.Schema({
     },
     rol: {
         type: Number,
-        enum: [1, 2, 3], 
-        required: true
+        enum: [1, 2, 3],
+        default: 1
     }
     });
   

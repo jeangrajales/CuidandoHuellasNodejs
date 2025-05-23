@@ -20,9 +20,11 @@ exports.findAllUser = async (filter, projection) => {
 }
 
 exports.createUserRecord = async (userInfo) => {
-    try{
-        return new User(userInfo).save();
-    } catch (error){
-        return error;
+    try {
+        const nuevoUsuario = new modeloUsuario(userInfo);
+        return await nuevoUsuario.save();
+    } catch (error) {
+        console.error("Error al crear usuario:", error);
+        throw error;
     }
-}
+};

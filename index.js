@@ -1,39 +1,57 @@
-const exp = require("express")
-const modeloProducto = require('./src/models/producto.model')
-const dbProducto = require('./src/data/producto.data');
+const exp = require("express");
+const modeloProducto = require("./src/models/producto.model");
+const dbProducto = require("./src/data/producto.data");
+const usuarioRoutes = require("./routes/router");
 
 
 const app = exp();
 
-
-app.set('view engine', 'ejs'); // Se Configura EJS como motor de plantillas
-
-// Asegúrar de que las vistas se busquen en la carpeta correcta
-app.set('views', __dirname + '/src/views');
-app.use(exp.static(__dirname + '/src/public'));
-
-// Middleware para procesar JSON
+// Middleware para procesar JSON y formularios
 app.use(exp.json());
 app.use(exp.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-  res.render('pages/pagina_principal'); // Renderiza las plantillas desde la carpeta 'views'
+// Configurar motor de vistas y archivos estáticos
+app.set("view engine", "ejs");
+app.set("views", __dirname + "/src/views");
+app.use(exp.static(__dirname + "/src/public"));
+
+// Montar las rutas después de configurar middlewares
+app.use(usuarioRoutes);
+
+// Ruta principal
+app.get("/", (req, res) => {
+  res.render("pagina_principal");
+});
+
+// Ruta para obtener productos
+app.get("/productos", async (req, res) => {
+  try {
+    const productos = await dbProducto.getAllProductos();
+    console.log("Productos obtenidos:", productos);
+    res.render("productos", { productos });
+  } catch (error) {
+    console.error("Error cargando los productos:", error);
+    res.status(500).send("Error cargando los productos");
+  }
+});
+
+// Ruta para registrarse
+app.get("/registrarse", (req, res) => {
+    res.render("registrarse", { mensaje: null }); // Pasa la variable aunque esté vacía
+});
+
+app.get("/iniciar_sesion", (req, res) => {
+    res.render("iniciar_sesion", { mensaje: null }); // Pasa la variable aunque esté vacía
+});
+
+app.get("/pagina_usuario", (req, res) => {
+    res.render("pagina_usuario", { titulo: "Página del Usuario" });
 });
 
 
-app.get('/productos', async (req, res) => {
-    try {
-        const productos = await dbProducto.getAllProductos();
-        console.log("Productos obtenidos:", productos); // Verificar si hay datos
-        res.render('pages/productos', { productos });
-    } catch (error) {
-        console.error("Error cargando los productos:", error); // Muestra el error exacto en la consola
-        res.status(500).send("Error cargando los productos");
-    }
+
+// Iniciar servidor
+app.listen(7777, () => {
+  console.log("Servidor en línea, Puerto 7777");
 });
 
-
-//callback
-app.listen(7777,()=>{
-    console.log('Servidor en linea, Puerto 7777')
-});
